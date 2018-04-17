@@ -1,5 +1,5 @@
 #!python2
-
+from functionality import *
 from Tkinter import *
 from tkFileDialog import askopenfilename
 import csv
@@ -128,6 +128,8 @@ class Application(Frame):
         self.go.grid(column=1, row=9, sticky=W) 
         self.error.grid(column=1, row=10, sticky=(W, E))
 
+
+make_sample_export()
 
 root = Tk()
 root.title("Google Geolocation")
