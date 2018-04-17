@@ -1,16 +1,25 @@
 #!python2
-from functionality import *
+
+# local imports
+from csv_handling import *
+
+# lib imports
 from Tkinter import *
 from tkFileDialog import askopenfilename
+import tkMessageBox
 import csv
 
 #######################################
 # FUNCTIONALITY
-def callAPI(csv, sperator, adressColumn, apiKey):
+def processInput(csv, sperator, adressColumn, apiKey):
     print "CSV file: " + csv
     print "CSV seperator: " + sperator
     print "Adress column: " + adressColumn
     print "Google Maps API Key: " + apiKey
+
+    adresses = getAdressesToGeocode(csv, sperator, adressColumn)
+    print adresses
+    print "Marko hier sind deine Adressen! Die Spaltennummer steht noch davor [[1, adresse1], [2, adresse2]], passt das oder stoert es?"
     
 
 #######################################
@@ -44,11 +53,13 @@ class Application(Frame):
                 for c in self.columnNames:                      # for all columns
                     var = IntVar()                              # create new IntVar (information if box is checked)
                     self.IntVars.append(var)                    # appen to IntVar list
-                    Checkbutton(self, text=c, variable=var).grid(row=6+counter, column= 1, sticky=W) # add new checkbutton
+                    Checkbutton(self, text=c, variable=var, background=self.backgr, foreground=self.foregr, selectcolor=self.button).grid(row=6+counter, column= 1, sticky=W, padx=(self.padLeft-5, 0)) # add new checkbutton
                     counter += 1
 
                 self.updateRows(len(self.columnNames))          # move other items (API key, Go-Button, Error-messages to bottom)
                 self.message.set("")
+
+                
             except:
                 self.message.set("Error while processing CSV")
 
@@ -60,32 +71,38 @@ class Application(Frame):
         self.pack()
 
     def getCheckedCheckboxes(self):
-        counter = 0
-        checkedCheckboxes = []                                  # to store names of checked columns
-        for box in self.IntVars:                                # for all checkboxes
-            if box.get() == 1:                                  # get info if box is checked (1)
-                checkedCheckboxes.append(self.columnNames[counter])# if its checked add name to list
-            counter += 1
-               
-        if len(checkedCheckboxes) < 1:                          
-            self.message.set("Please select adress column first")
+        try:
+            counter = 0
+            checkedCheckboxes = []                                  # to store names of checked columns
+            for box in self.IntVars:                                # for all checkboxes
+                if box.get() == 1:                                  # get info if box is checked (1)
+                    checkedCheckboxes.append(self.columnNames[counter])# if its checked add name to list
+                counter += 1
+                   
+            if len(checkedCheckboxes) < 1:                          
+                self.message.set("Please select adress column first")
+                return False
+            elif len(checkedCheckboxes) > 1:
+                self.message.set("Only one column can be selected")
+                return False
+            else:                                                   # proceed if only one box is checked
+                self.message.set("")
+                self.adressColumn = checkedCheckboxes[0]
+                return True
+        except:
             return False
-        elif len(checkedCheckboxes) > 1:
-            self.message.set("Only one column can be selected")
-            return False
-        else:                                                   # proceed if only one box is checked
-            self.message.set("")
-            self.adressColumn = checkedCheckboxes[0]
-            return True
 
-    def startAPIcall(self):
+    def startInputProcessing(self):
+        self.message.set("")
         checked = self.getCheckedCheckboxes()                   # check if box is checked correctly
         if checked == True:
             if self.apiKey.get() != "":                         # check if API Key entry is filled
-                callAPI(self.filename, self.seperator, self.adressColumn, self.apiKey.get()) # call functionality part
+                processInput(self.filename, self.seperator, self.adressColumn, self.apiKey.get()) # call functionality part
                 self.message.set("")
             else:
                 self.message.set("Please insert your API Key")
+        else:
+            self.message.set("Please select adress column first")
         
     def createWidgets(self):
         # http://www.tkdocs.com/tutorial/firstexample.html#design
@@ -99,7 +116,7 @@ class Application(Frame):
 
         # "open csv" part
         csvLabel =Label(mainframe, text="Open CSV with the adresses")       
-        self.csv_file = Entry(mainframe, width=15, textvariable=self.csv)
+        self.csv_file = Entry(mainframe, width=60, textvariable=self.csv)
         openFileB = Button(mainframe, text="Open", command=self.openFile)
         # "csv seperator" part
         seperatorLabel = Label(mainframe, text="CSV seperator")
@@ -108,32 +125,47 @@ class Application(Frame):
         loadColumnsB = Button(mainframe, text="Load CSV columns", command=self.getCsvColumns)
         self.listbox = Listbox(mainframe)
         # "Google maps API" part
-        self.apiKeyLabel = Label(mainframe, text="Please enter your Google Maps API Key")
-        self.apiKey = Entry(mainframe, width=15)
+        self.apiKeyLabel = Label(mainframe, text="Google Maps API Key")
+        self.apiKey = Entry(mainframe, width=30)
         # "GO! button" part
-        self.go = Button(mainframe, text="Go!", command=self.startAPIcall)
+        self.go = Button(mainframe, text="Go!", command=self.startInputProcessing)
         # "error/warning message part
-        self.error = Label(mainframe, fg="red", textvariable=self.message)
-
+        self.error = Label(mainframe, textvariable=self.message)
 
         # Layout
-        csvLabel.grid(column=1, row=1, sticky=W)
-        self.csv_file.grid(column=1, row=2, sticky=(W, E))
-        openFileB.grid(column=3, row=2, sticky=W)
-        seperatorLabel.grid(column=1, row=3, sticky=W)
-        self.csv_seperator.grid(column=1, row=4, sticky=(W))
-        loadColumnsB.grid(column=1, row=6, sticky=W)
-        self.apiKeyLabel.grid(column=1, row=7, sticky=W) 
-        self.apiKey.grid(column=1, row=8, sticky=(W,E)) 
-        self.go.grid(column=1, row=9, sticky=W) 
+        self.padLeft = 10
+        csvLabel.grid(column=1, row=1, sticky=W, padx=(self.padLeft, 0), pady=(10, 0))
+        self.csv_file.grid(column=1, row=2, sticky=(W, E), padx=(self.padLeft, 5))
+        openFileB.grid(column=3, row=2, sticky=W, padx=(0, 10))
+        seperatorLabel.grid(column=1, row=3, sticky=W, padx=(self.padLeft, 0))
+        self.csv_seperator.grid(column=1, row=4, sticky=(W), padx=(self.padLeft, 0))
+        loadColumnsB.grid(column=1, row=6, sticky=W, padx=(self.padLeft, 0), pady=(5, 0))
+        self.apiKeyLabel.grid(column=1, row=7, sticky=W, padx=(self.padLeft, 0), pady=(10, 0)) 
+        self.apiKey.grid(column=1, row=8, sticky=(W), padx=(self.padLeft, 0)) 
+        self.go.grid(column=1, row=9, sticky=W, padx=(self.padLeft, 0), pady=(10, 0)) 
         self.error.grid(column=1, row=10, sticky=(W, E))
 
+        # Color scheme
+        self.backgr = "#737373"
+        self.foregr = "#FFFFFF"
+        self.button = "#991f00"
+        self.buttonFont = "#FFFFFF"
+        self.configure(background=self.backgr)
+        csvLabel.configure(background=self.backgr, foreground=self.foregr)
+        openFileB.configure(background=self.button, foreground=self.buttonFont)
+        seperatorLabel.configure(background=self.backgr, foreground=self.foregr)
+        loadColumnsB.configure(background=self.button, foreground=self.buttonFont)
+        self.apiKeyLabel.configure(background=self.backgr, foreground=self.foregr)
+        self.go.configure(background=self.button, foreground=self.buttonFont) 
+        self.error.configure(background=self.backgr, foreground=self.button) 
 
-make_sample_export()
+def on_closing():
+    if tkMessageBox.askokcancel("Quit", "Do you want to quit?"):
+        root.destroy()
 
 root = Tk()
 root.title("Google Geolocation")
+root.protocol("WM_DELETE_WINDOW", on_closing)
 app = Application(master=root)
 app.mainloop()
-root.destroy()
 
