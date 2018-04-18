@@ -1,4 +1,5 @@
 #!python2
+# -*- coding: cp1252 -*-
 try:
     import requests
 except ImportError:
@@ -18,10 +19,10 @@ def log_request(adress, response):
     except:
         pass
 
-def connect_2_service(adress):
-    YOUR_API_KEY=""
-    
-    r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + YOUR_API_KEY)
+YOUR_API_KEY="AIzaSyC_ANbi6xo4ydjzOWs_EtWYm7R0dFMgHNs" # ADD YOUR API KEY HERE
+
+def connect_2_service(adress, key = YOUR_API_KEY):
+    r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key)
     print r.status_code
     if(r.status_code == 200):
         json_response = r.json()
@@ -29,7 +30,7 @@ def connect_2_service(adress):
         if(json_response["status"] == "OK"):
             #print json_response["results"]
             j= json_response["results"]
-            #Problem wenn Google mehrer Positionen für den Punkt findet wird aktuell nur die erste übergeben
+            #only first when multiple received
             if(len(j)>0):
                 location=  j[0]["geometry"]["location"]
                 list_lat_lon = [location["lat"],location["lng"]]
@@ -44,6 +45,13 @@ def connect_2_service(adress):
         print "could not establish connection to google-geocoding service - CHECK NETWORK"
 
 
+def geocode_multiple_adresses(adress_list, key = YOUR_API_KEY):
+    latlongList = []
+    for adress in adress_list:
+        print adress
+        latlongList.append(connect_2_service(adress, key))
+        
+
 #Test - delete later
-connect_2_service("Stuttgart")
+#connect_2_service("Schwarz-Weiß Mühlburg")
 

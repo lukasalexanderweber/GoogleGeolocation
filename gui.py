@@ -2,6 +2,7 @@
 
 # local imports
 from csv_handling import *
+from functionality import *
 
 # lib imports
 from Tkinter import *
@@ -17,10 +18,9 @@ def processInput(csv, sperator, adressColumn, apiKey):
     print "Adress column: " + adressColumn
     print "Google Maps API Key: " + apiKey
 
-    adresses = getAdressesToGeocode(csv, sperator, adressColumn)
-    print adresses
-    print "Marko hier sind deine Adressen! Die Spaltennummer steht noch davor [[1, adresse1], [2, adresse2]], passt das oder stoert es?"
-    
+    csv = CSV(csv, sperator, adressColumn)
+    csv.getAdressesToGeocode()
+    geocode_multiple_adresses(csv.adresses)
 
 #######################################
 # LAYOUT
