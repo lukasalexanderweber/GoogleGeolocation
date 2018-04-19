@@ -20,7 +20,7 @@ def processInput(csv, sperator, adressColumn, apiKey):
 
     csv = CSV(csv, sperator, adressColumn)
     csv.getAdressesToGeocode()
-    geocode_multiple_adresses(csv.adresses)
+    print geocode_multiple_adresses(csv.adresses)
 
 #######################################
 # LAYOUT
