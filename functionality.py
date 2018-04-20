@@ -19,7 +19,7 @@ def log_request(adress, response):
     except:
         pass
 
-YOUR_API_KEY="AIzaSyC_ANbi6xo4ydjzOWs_EtWYm7R0dFMgHNs" # ADD YOUR API KEY HERE
+YOUR_API_KEY="AIzaSyC_ANbi6xo4ydjzOWs_EtWYm7R0dFMgHNs" # FOR TESTING ADD YOUR API KEY HERE
 
 def connect_2_service(adress, key = YOUR_API_KEY):
     print adress
@@ -73,8 +73,9 @@ def connect_2_service(adress, key = YOUR_API_KEY):
             return [status, [0,0]]                      # all 2500 requests per day used
 
     else:
-        log_request(adress, "status code: " + str(r.status_code))
         print "could not establish connection to google-geocoding service - CHECK NETWORK"
+        log_request(adress, "status code: " + str(r.status_code))
+        return ["NETWORK_PROBLEM", [0,0]]
 
 
 def geocode_multiple_adresses(adress_list, key = YOUR_API_KEY):
@@ -84,13 +85,16 @@ def geocode_multiple_adresses(adress_list, key = YOUR_API_KEY):
     latlongList = []
     for adress in adress_list:
         result = connect_2_service(adress, key)
-        if result[0] != "REQUEST_DENIED" and result[0] != "OVER_QUERY_LIMIT":
+        if result[0] != "REQUEST_DENIED" and result[0] != "OVER_QUERY_LIMIT" and result[0] != "NETWORK_PROBLEM":
             latlongList.append(result)
         elif result[0] == "REQUEST_DENIED":
             return ["REQUEST_DENIED", []]
             break
         elif result[0] == "OVER_QUERY_LIMIT":
             return ["OVER_QUERY_LIMIT", latlongList]
+            break
+        elif result[0] == "NETWORK_PROBLEM":
+            return ["NETWORK_PROBLEM", latlongList]
             break
     return ["OK", latlongList]
     
