@@ -105,7 +105,7 @@ test = ""
 #print test
 #connect_2_service(test)
 
-test2 = ["resedenweg 48 76199 karlsruhe", "schleusenstrasse", "dsfsddfgsadsadasfdsfs"]
+test2 = ["resedenweg 48 76199 karlsruhe", "schleusenstrasse", "dsfsddfgsadsadasfdsfs", ""]
 #print test2
 #print geocode_multiple_adresses(test2)
 
