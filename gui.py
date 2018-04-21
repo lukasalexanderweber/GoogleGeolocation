@@ -131,6 +131,8 @@ class Application(Frame):
         self.go = Button(mainframe, text="Go!", command=self.startInputProcessing)
         # "error/warning message part
         self.error = Label(mainframe, textvariable=self.message)
+        # progress bar
+        self.pb = ttk.Progressbar(mainframe, mode='determinate')
 
         # Layout
         self.padLeft = 10
@@ -144,6 +146,7 @@ class Application(Frame):
         self.apiKey.grid(column=1, row=8, sticky=(W), padx=(self.padLeft, 0)) 
         self.go.grid(column=1, row=9, sticky=W, padx=(self.padLeft, 0), pady=(10, 0)) 
         self.error.grid(column=1, row=10, sticky=(W, E))
+        self.pb.grid(column=1, columnspan = 3, row=11, sticky=(W, E))
 
         # Color scheme
         self.backgr = "#737373"
