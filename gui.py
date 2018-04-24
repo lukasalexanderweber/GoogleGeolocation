@@ -12,11 +12,7 @@ import ttk
 import tkMessageBox
 import csv
 
-#######################################
-# FUNCTIONALITY
 
-#######################################
-# LAYOUT
 class Application(Frame):
     
     def __init__(self, master=None):

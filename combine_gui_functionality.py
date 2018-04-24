@@ -9,13 +9,13 @@ def processInput(gui, csv, sperator, decSeperator, adressColumn, apiKey):
     print "Adress column: " + adressColumn
     print "Google Maps API Key: " + apiKey
 
+    frame = gui
+    success = 1
+
     csv = CSV(csv, sperator, adressColumn)
     catch = csv.getAdressesToGeocode()
     if catch == False:
         frame.setMessage("error", "Could not read the csv file using \"genfromtxt\"")
-
-    frame = gui
-    success = 1
 
     if len(csv.adresses) == 0:
         success = 0
@@ -26,7 +26,8 @@ def processInput(gui, csv, sperator, decSeperator, adressColumn, apiKey):
         frame.setMessage("normal", "Skipped {0} already geolocated adresses.\nProcessing {1} adresses".format(csv.rows2skip-1, len(csv.adresses)))
 
     counter = 1
-    parts = 100/len(csv.adresses)
+    if len(csv.adresses) != 0:          # would be division through 0
+        parts = 100/len(csv.adresses)
 
     for i in range(len(csv.adresses)):
         result = connect_2_service(csv.adresses[i], apiKey)

@@ -31,8 +31,9 @@ def connect_2_service(adress, key = YOUR_API_KEY):
 
 ##    try:
     #url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key
-    #url = "" + "ü".encode('utf8')
-    url = "".join(["https://maps.googleapis.com/maps/api/geocode/json?address=", "u" + adress, "&key=", key])
+    url = u"https://maps.googleapis.com/maps/api/geocode/json?address=" + adress + "&key=" + key
+    
+    
     r = requests.get(url)
 ##    except:
 ##        print "network problem"
@@ -89,4 +90,6 @@ def connect_2_service(adress, key = YOUR_API_KEY):
         return ["NETWORK_PROBLEM", [0,0]]
 
 test = "resedenweg 48 76199 rüppurr"
+#test2 = u"" + test
 #print connect_2_service(test)
+
