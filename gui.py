@@ -12,7 +12,7 @@ import csv
 
 #######################################
 # FUNCTIONALITY
-def processInput(csv, sperator, adressColumn, apiKey):
+def processInput(gui, csv, sperator, adressColumn, apiKey):
     print "CSV file: " + csv
     print "CSV seperator: " + sperator
     print "Adress column: " + adressColumn
@@ -20,7 +20,44 @@ def processInput(csv, sperator, adressColumn, apiKey):
 
     csv = CSV(csv, sperator, adressColumn)
     csv.getAdressesToGeocode()
-    print geocode_multiple_adresses(csv.adresses)
+
+    frame = gui
+    success = 1
+    
+    if csv.rows2skip == 0:
+        frame.setMessage("normal", "Processing {0} adresses".format(len(csv.adresses)))
+    else:
+        frame.setMessage("normal", "Skipped {0} already geolocated adresses.\nProcessing {1} adresses".format(csv.rows2skip-1, len(csv.adresses)))
+
+    if len(csv.adresses) == 0:
+        success = 0
+        frame.setMessage("normal", "All adresses are already geolocated")
+        print "All adresses are already geolocated"
+
+    for i in range(len(csv.adresses)):
+        result = connect_2_service(csv.adresses[i], apiKey)
+        
+        if result[0] != "REQUEST_DENIED" and result[0] != "OVER_QUERY_LIMIT" and result[0] != "NETWORK_PROBLEM":
+            csv.insertResult(csv.rows[i], result)
+            
+        elif result[0] == "REQUEST_DENIED":
+            success = 0
+            frame.setMessage("error", "Your Google Maps API Key seems to be not valid")
+            break
+        
+        elif result[0] == "OVER_QUERY_LIMIT":
+            success = 0
+            frame.setMessage("normal", "You have reached your daily limit of 2500 requests.\n{0} of {1} adresses are now geocoded.\nPlease come back tomorrow and do not make changes at the csv".format(2,1))
+            break
+        
+        elif result[0] == "NETWORK_PROBLEM":
+            success = 0
+            frame.setMessage("error", "You have an connection error")
+            break
+
+    if success == 1:
+        frame.setMessage("normal", "Your adresses are now geolocated!")
+
 
 #######################################
 # LAYOUT
@@ -47,6 +84,9 @@ class Application(Frame):
                 for row in csv.reader(adressCSV):               # iterate through rows
                     self.columnNames = row[0].split(self.seperator)# split at the given seperator
                     break                                       # only first row needed for names
+
+                if "geolocateSTATUS" in self.columnNames:       # don't show the geolocation columns
+                    self.columnNames = self.columnNames[:-3]
 
                 counter = 1
                 self.IntVars = []                               # list to save all IntVars of the checkboxes
@@ -97,7 +137,7 @@ class Application(Frame):
         checked = self.getCheckedCheckboxes()                   # check if box is checked correctly
         if checked == True:
             if self.apiKey.get() != "":                         # check if API Key entry is filled
-                processInput(self.filename, self.seperator, self.adressColumn, self.apiKey.get()) # call functionality part
+                processInput(self, self.filename, self.seperator, self.adressColumn, self.apiKey.get()) # call functionality part
                 self.message.set("")
             else:
                 self.message.set("Please insert your API Key")
@@ -121,6 +161,9 @@ class Application(Frame):
         # "csv seperator" part
         seperatorLabel = Label(mainframe, text="CSV seperator")
         self.csv_seperator = Entry(mainframe, width=2)
+
+        ####decimal separator
+        
         # "load csv columns" part
         loadColumnsB = Button(mainframe, text="Load CSV columns", command=self.getCsvColumns)
         self.listbox = Listbox(mainframe)
@@ -132,7 +175,7 @@ class Application(Frame):
         # "error/warning message part
         self.error = Label(mainframe, textvariable=self.message)
         # progress bar
-        self.pb = ttk.Progressbar(mainframe, mode='determinate')
+        #self.pb = ttk.Progressbar(mainframe, mode='determinate')
 
         # Layout
         self.padLeft = 10
@@ -146,7 +189,7 @@ class Application(Frame):
         self.apiKey.grid(column=1, row=8, sticky=(W), padx=(self.padLeft, 0)) 
         self.go.grid(column=1, row=9, sticky=W, padx=(self.padLeft, 0), pady=(10, 0)) 
         self.error.grid(column=1, row=10, sticky=(W, E))
-        self.pb.grid(column=1, columnspan = 3, row=11, sticky=(W, E))
+        #self.pb.grid(column=1, columnspan = 3, row=11, sticky=(W, E))
 
         # Color scheme
         self.backgr = "#737373"
@@ -160,7 +203,16 @@ class Application(Frame):
         loadColumnsB.configure(background=self.button, foreground=self.buttonFont)
         self.apiKeyLabel.configure(background=self.backgr, foreground=self.foregr)
         self.go.configure(background=self.button, foreground=self.buttonFont) 
-        self.error.configure(background=self.backgr, foreground=self.button) 
+        self.error.configure(background=self.backgr, foreground=self.button)
+
+    def setMessage(self, color, message):
+        self.message.set(message)
+        if color == "error":
+            self.error.configure(background=self.backgr, foreground=self.button)
+        elif color == "normal":
+            self.error.configure(background=self.backgr, foreground=self.foregr)
+        self.update()
+
 
 def on_closing():
     if tkMessageBox.askokcancel("Quit", "Do you want to quit?"):

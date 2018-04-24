@@ -24,10 +24,17 @@ YOUR_API_KEY="AIzaSyC_ANbi6xo4ydjzOWs_EtWYm7R0dFMgHNs" # FOR TESTING ADD YOUR AP
 def connect_2_service(adress, key = YOUR_API_KEY):
     print adress
     if adress == "":
+        print "empty adress"
         log_request(adress, "empty adress")             # log 
         return ["EMPTY ADRESS", [0,0]]                  # and return status + list of zeros
 
-    r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key)
+    try:
+        r = requests.get(u"https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key)
+    except:
+        print "network problem"
+        log_request(adress, "network problem")
+        return ["NETWORK_PROBLEM", [0,0]]
+        
 
     if(r.status_code == 200):                           # if connection can be established 
         json_response = r.json()                        # parse JSON response
@@ -75,37 +82,5 @@ def connect_2_service(adress, key = YOUR_API_KEY):
     else:
         print "could not establish connection to google-geocoding service - CHECK NETWORK"
         log_request(adress, "status code: " + str(r.status_code))
-        return ["NETWORK_PROBLEM", [0,0]]
-
-
-def geocode_multiple_adresses(adress_list, key = YOUR_API_KEY):
-    if len(adress_list) < 2:
-        return ["MULTIPLE_ADRESSES_NEEDED, use connect_2_service() for single adress", []]
-
-    latlongList = []
-    for adress in adress_list:
-        result = connect_2_service(adress, key)
-        if result[0] != "REQUEST_DENIED" and result[0] != "OVER_QUERY_LIMIT" and result[0] != "NETWORK_PROBLEM":
-            latlongList.append(result)
-        elif result[0] == "REQUEST_DENIED":
-            return ["REQUEST_DENIED", []]
-            break
-        elif result[0] == "OVER_QUERY_LIMIT":
-            return ["OVER_QUERY_LIMIT", latlongList]
-            break
-        elif result[0] == "NETWORK_PROBLEM":
-            return ["NETWORK_PROBLEM", latlongList]
-            break
-    return ["OK", latlongList]
+        return ["NETWORK_PROBLEM", [0,0]]    
     
-    
-
-#Test - delete later
-test = ""
-#print test
-#connect_2_service(test)
-
-test2 = ["resedenweg 48 76199 karlsruhe", "schleusenstrasse", "dsfsddfgsadsadasfdsfs", ""]
-#print test2
-#print geocode_multiple_adresses(test2)
-
