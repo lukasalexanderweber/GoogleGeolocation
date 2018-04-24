@@ -46,13 +46,13 @@ class CSV:
         
         return self.adresses
 
-    def insertResult(self, row, result):
+    def insertResult(self, row, result, decSep = ","):
         status = result[0]
-        lat = result[1][0]
-        lon = result[1][1]
+        lat = str(result[1][0]).replace(".", decSep)
+        lon = str(result[1][1]).replace(".", decSep)
         
-        self.data[row, self.nCol-3] = str(lat)      # lat
-        self.data[row, self.nCol-2] = str(lon)      # long
+        self.data[row, self.nCol-3] = lat           # lat
+        self.data[row, self.nCol-2] = lon           # long
         self.data[row, self.nCol-1] = status        # status
 
         try:

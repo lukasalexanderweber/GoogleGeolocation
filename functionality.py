@@ -2,6 +2,7 @@
 # -*- coding: cp1252 -*-
 try:
     import requests
+    import json
 except ImportError:
     print("""You need "requests" !    or run :C:\Python27\Scripts>pip install requests """)
 
@@ -28,12 +29,15 @@ def connect_2_service(adress, key = YOUR_API_KEY):
         log_request(adress, "empty adress")             # log 
         return ["EMPTY ADRESS", [0,0]]                  # and return status + list of zeros
 
-    try:
-        r = requests.get(u"https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key)
-    except:
-        print "network problem"
-        log_request(adress, "network problem")
-        return ["NETWORK_PROBLEM", [0,0]]
+##    try:
+    #url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key
+    #url = "" + "ü".encode('utf8')
+    url = "".join(["https://maps.googleapis.com/maps/api/geocode/json?address=", "u" + adress, "&key=", key])
+    r = requests.get(url)
+##    except:
+##        print "network problem"
+##        log_request(adress, "problem with request query to google api")
+##        return ["NETWORK_PROBLEM", [0,0]]
         
 
     if(r.status_code == 200):                           # if connection can be established 
@@ -82,5 +86,7 @@ def connect_2_service(adress, key = YOUR_API_KEY):
     else:
         print "could not establish connection to google-geocoding service - CHECK NETWORK"
         log_request(adress, "status code: " + str(r.status_code))
-        return ["NETWORK_PROBLEM", [0,0]]    
-    
+        return ["NETWORK_PROBLEM", [0,0]]
+
+test = "resedenweg 48 76199 rüppurr"
+#print connect_2_service(test)
