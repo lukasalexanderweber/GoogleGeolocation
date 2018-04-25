@@ -1,5 +1,6 @@
 #!python2
-# -*- coding: cp1252 -*-
+# -*- coding: iso-8859-1 -*-
+
 try:
     import requests
     import json
@@ -31,7 +32,7 @@ def connect_2_service(adress, key = YOUR_API_KEY):
 
 ##    try:
     #url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key
-    url = u"https://maps.googleapis.com/maps/api/geocode/json?address=" + adress + "&key=" + key
+    url = u"https://maps.googleapis.com/maps/api/geocode/json?address=" + adress.decode('iso-8859-1') + "&key=" + key
     
     
     r = requests.get(url)
@@ -89,7 +90,8 @@ def connect_2_service(adress, key = YOUR_API_KEY):
         log_request(adress, "status code: " + str(r.status_code))
         return ["NETWORK_PROBLEM", [0,0]]
 
-test = "resedenweg 48 76199 rüppurr"
+test = "resedenweg 48 76199 rÜppurr"
+#test=  test.decode('iso-8859-1')
 #test2 = u"" + test
-#print connect_2_service(test)
+print connect_2_service(test)
 
