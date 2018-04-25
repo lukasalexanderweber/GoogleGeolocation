@@ -30,16 +30,13 @@ def connect_2_service(adress, key = YOUR_API_KEY):
         log_request(adress, "empty adress")             # log 
         return ["EMPTY ADRESS", [0,0]]                  # and return status + list of zeros
 
-##    try:
-    #url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ adress + "&key=" + key
-    url = u"https://maps.googleapis.com/maps/api/geocode/json?address=" + adress.decode('iso-8859-1') + "&key=" + key
-    
-    
-    r = requests.get(url)
-##    except:
-##        print "network problem"
-##        log_request(adress, "problem with request query to google api")
-##        return ["NETWORK_PROBLEM", [0,0]]
+    try:
+        url = u"https://maps.googleapis.com/maps/api/geocode/json?address=" + adress.decode('iso-8859-1') + "&key=" + key
+        r = requests.get(url)
+    except:
+        print "network problem"
+        log_request(adress, "problem with request query to google api")
+        return ["NETWORK_PROBLEM", [0,0]]
         
 
     if(r.status_code == 200):                           # if connection can be established 
