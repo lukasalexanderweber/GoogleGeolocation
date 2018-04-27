@@ -36,7 +36,7 @@ def connect_2_service(adress, key = YOUR_API_KEY):
     except:
         print "network problem"
         log_request(adress, "problem with request query to google api")
-        return ["NETWORK_PROBLEM", [0,0]]
+        return ["NETWORK_PROBLEM", [0,0], ""]
         
 
     if(r.status_code == 200):                           # if connection can be established 
@@ -54,41 +54,40 @@ def connect_2_service(adress, key = YOUR_API_KEY):
 
             location=  j[0]["geometry"]["location"]     # get fist result
             list_lat_lon = [location["lat"],location["lng"]] # store lat and long in list
+            adress = j[0]["formatted_address"]
             print list_lat_lon                          # print and return status + coordinates
-            return [status, list_lat_lon]
+            return [status, list_lat_lon, adress]
 
         if(status == "ZERO_RESULTS"):
             print "no results"
             log_request(adress, "no results")          
-            return [status, [0,0]]                     
+            return [status, [0,0], ""]                     
 
         if(status == "UNKNOWN_ERROR"):
             print "no results"
             log_request(adress, "unknown error")        
-            return [status, [0,0]]                      
+            return [status, [0,0], ""]                      
 
         if(status == "INVALID_REQUEST"):
             print "invalid request"
             log_request(adress, "invalid request")     
-            return [status, [0,0]]                      
+            return [status, [0,0], ""]                      
 
         if(status == "REQUEST_DENIED"):
             print "request denied"
             log_request(adress, "request denied")
-            return [status, [0,0]]                      # probably API key error
+            return [status, [0,0], ""]                      # probably API key error
 
         if(status == "OVER_QUERY_LIMIT"):
             print "over google map api query limit (not more than 2500 queries a day)"
             log_request(adress, "over query limit")
-            return [status, [0,0]]                      # all 2500 requests per day used
+            return [status, [0,0], ""]                      # all 2500 requests per day used
 
     else:
         print "could not establish connection to google-geocoding service - CHECK NETWORK"
         log_request(adress, "status code: " + str(r.status_code))
-        return ["NETWORK_PROBLEM", [0,0]]
+        return ["NETWORK_PROBLEM", [0,0], ""]
 
-test = "resedenweg 48 76199 r‹ppurr"
-#test=  test.decode('iso-8859-1')
-#test2 = u"" + test
-print connect_2_service(test)
+#test = "testadress"
+#print connect_2_service(test)
 

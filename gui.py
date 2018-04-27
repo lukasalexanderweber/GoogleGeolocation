@@ -49,7 +49,7 @@ class Application(Frame):
                     break                                       # only first row needed for names
 
                 if "geolocateSTATUS" in self.columnNames:       # don't show the geolocation columns
-                    self.columnNames = self.columnNames[:-3]
+                    self.columnNames = self.columnNames[:-4]
 
                 counter = 1
                 self.IntVars = []                               # list to save all IntVars of the checkboxes
