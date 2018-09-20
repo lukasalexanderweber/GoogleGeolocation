@@ -1,7 +1,7 @@
 # GoogleGeolocation
 
 Python tool to extend a csv file with lat long columns based on an adress column by calling the Google Maps Geolocation API.
-Open the GUI.py file to start the application. A test dataset (./data) and an API key are given for testing.
+Open the GUI.py file to start the application. A test dataset ([data](data)) and an API key are given for testing.
 
 ![Alt Text](https://github.com/lukasalexanderweber/GoogleGeolocation/blob/master/img/GUI.png)
 
