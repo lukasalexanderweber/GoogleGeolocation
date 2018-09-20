@@ -7,7 +7,7 @@ Open the GUI.py file to start the application. A test dataset (./data) and an AP
 
 <br>
 
-![Alt Text](https://github.com/lukasalexanderweber/GoogleGeolocation/blob/master/img/Excel.png)
+![Alt Text](https://github.com/lukasalexanderweber/GoogleGeolocation/blob/master/img/Excel.PNG)
 
 
 ### Dependencies
