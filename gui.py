@@ -1,9 +1,9 @@
 #!python2
 
 # local imports
-from csv_handling import *
-from functionality import *
-from combine_gui_functionality import *
+from scripts.csvHandling import *
+from scripts.connect2googlegeo import *
+from scripts.processGUIinput import *
 
 # lib imports
 from Tkinter import *
@@ -24,13 +24,13 @@ class Application(Frame):
         filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
         self.csv.set(filename)       # the StringVar is set, Entry updated
 
-    def openText(self):
+    def openText(self):              # to get the Geolocation API key from a textfile
         filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
         try:
             with open(filename) as f:
-                key = f.readline()
-                key = key.strip()
-                self.key.set(key)       # the StringVar is set, Entry updated
+                TKey = f.readline()
+                TKey = TKey.strip()
+                self.key.set(TKey)       # the StringVar is set, Entry updated
         except:
             self.message.set("Could not receive Key, please enter manualy")
 

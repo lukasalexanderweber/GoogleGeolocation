@@ -1,13 +1,11 @@
-Shop-ID;Brand;Country;Postcode;City;Street and Housenumber;Complete adress;With brand
-5976136;Subway;DE;1067;Dresden;Pfarrgasse 1;Pfarrgasse 1 01067 Dresden;Subway Pfarrgasse 1 01067 Dresden
-5976449;Subway;DE;1069;Dresden;St. Petersburg Str. 26-32;St. Petersburg Str. 26-32 01069 Dresden;Subway St. Petersburg Str. 26-32 01069 Dresden
-5976410;Subway;DE;1069;Dresden;Wiener Platz 4;Wiener Platz 4 01069 Dresden;Subway Wiener Platz 4 01069 Dresden
-5976121;Subway;DE;1099;Dresden;Alaunstrasse 1;Alaunstrasse 1 01099 Dresden;Subway Alaunstrasse 1 01099 Dresden
-5976332;Subway;DE;1099;Dresden;Königsbrücker Strasse 60;Königsbrücker Strasse 60 01099 Dresden;Subway Koenigsbruecker Strasse 60 01099 Dresden
-5976413;Subway;DE;1159;Dresden;Kesselsdorfer Str. 81;Kesselsdorfer Str. 81 01159 Dresden;Subway Kesselsdorfer Str. 81 01159 Dresden
-5976153;Subway;DE;1309;Dresden;Loschwitzer Strasse 47;Loschwitzer Strasse 47 01309 Dresden;Subway Loschwitzer Strasse 47 01309 Dresden
-5976385;Subway;DE;1445;Radebeul;Hauptstr. 8;Hauptstr. 8 01445 Radebeul;Subway Hauptstr. 8 01445 Radebeul
-5976526;Subway;DE;1589;Riesa;Nossener Str. 50;Nossener Str. 50 01589 Riesa;Subway Nossener Str. 50 01589 Riesa
-5976476;Subway;DE;1796;Pirna;Gartenstrasse 1;Gartenstrasse 1 01796 Pirna;Subway Gartenstrasse 1 01796 Pirna
-5976175;Subway;DE;2625;Bautzen;Karl-Marx-Str. 10;Karl-Marx-Str. 10 02625 Bautzen;Subway Karl-Marx-Str. 10 02625 Bautzen
-5976330;Subway;DE;4109;Leipzig;Friedrich-Ebert-Strasse 95a;Friedrich-Ebert-Strasse 95a 04109 Leipzig;Subway Friedrich-Ebert-Strasse 95a 04109 Leipzig
+Shop-ID;Brand;Country;Postcode;City;Street and Housenumber;Complete adress;geolocateLAT;geolocateLONG;geolocateSTATUS;geolocateADRESS
+5976136;Subway;DE;1067;Dresden;Pfarrgasse 1;Pfarrgasse 1 01067 Dresden;51,0479355;13,7389651;OK;Pfarrgasse 1 01067 Dresden Germany
+5976449;Subway;DE;1069;Dresden;St. Petersburg Str. 26-32;St. Petersburg Str. 26-32 01069 Dresden;51,0443767;13,7366908;OK;St. Petersburger Straße 26 01069 Dresden 
+5976332;Subway;DE;1099;Dresden;Königsbrücker Strasse 60;Königsbrücker Strasse 60 01099 Dresden;51,0701454;13,7498982;OK;Königsbrücker Str. 60 01099 Dresden Germa
+5976413;Subway;DE;1159;Dresden;Kesselsdorfer Str. 81;Kesselsdorfer Str. 81 01159 Dresden;51,0411117;13,6834936;OK;Kesselsdorfer Str. 81 01159 Dresden Germa
+5976153;Subway;DE;1309;Dresden;Loschwitzer Strasse 47;Loschwitzer Strasse 47 01309 Dresden;51,052266;13,804514;OK;Loschwitzer Str. 47 01309 Dresden Germany
+5976385;Subway;DE;1445;Radebeul;Hauptstr. 8;Hauptstr. 8 01445 Radebeul;51,0997803;13,6783041;OK;Hauptstraße 8 01445 Radebeul Germany
+5976526;Subway;DE;1589;Riesa;Nossener Str. 50;Nossener Str. 50 01589 Riesa;51,2942422;13,2862648;OK;Nossener Str. 50 01589 Riesa Germany
+5976476;Subway;DE;1796;Pirna;Gartenstrasse 1;Gartenstrasse 1 01796 Pirna;50,9619104;13,9376538;OK;Gartenstraße 1 01796 Pirna Germany
+5976175;Subway;DE;2625;Bautzen;Karl-Marx-Str. 10;Karl-Marx-Str. 10 02625 Bautzen;51,1790277;14,4275984;OK;Karl-Marx-Straße 10 02625 Bautzen Germany
+5976330;Subway;DE;4109;Leipzig;Friedrich-Ebert-Strasse 95a;Friedrich-Ebert-Strasse 95a 04109 Leipzig;51,3418123;12,3587563;OK;Friedrich-Ebert-Straße 95 04109 Leipzig G

@@ -6,3 +6,15 @@ Download and open the GUI.py file to start the application.
 ![Alt Text](https://github.com/lukasalexanderweber/GoogleGeolocation/blob/master/img/GUI.png)
 
 
+### Dependencies
+
+Following libraries are needed to run this program
+
+* Tkinter 
+	* tkFileDialog
+	* ttk
+	* tkMessageBox
+* csv
+* numpy
+* requests
+* json

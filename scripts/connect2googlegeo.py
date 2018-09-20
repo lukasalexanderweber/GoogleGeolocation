@@ -46,17 +46,17 @@ def connect_2_service(adress, key = YOUR_API_KEY):
         if(status == "OK"):                             # if results are returned
             j = json_response["results"]                # get the result part
 
-            if len(j) > 1:                              # what do we do with multiple results?
-                status = "MULTIPLE_RESULTS"
+            if len(j) > 1:                              # for multiple results the first entry (most probable) is returned
+                status = "MULTIPLE_RESULTS"             # but user is informed that there were multiple results
                 #print "multiple options:"
                 #for option in j:
                 #    print option["formatted_address"]
 
-            location=  j[0]["geometry"]["location"]     # get fist result
+            location=  j[0]["geometry"]["location"]     # get location of first result
             list_lat_lon = [location["lat"],location["lng"]] # store lat and long in list
-            adress = j[0]["formatted_address"]
-            print list_lat_lon                          # print and return status + coordinates
-            return [status, list_lat_lon, adress]
+            adress = j[0]["formatted_address"]          # store formatted adress  
+            print list_lat_lon                          # print coordinates  
+            return [status, list_lat_lon, adress]       # return status + coordinates + adress
 
         if(status == "ZERO_RESULTS"):
             print "no results"
